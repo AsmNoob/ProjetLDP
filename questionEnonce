@@ -1,0 +1,16 @@
+1) c'est donc bien un tableau de tableaux de tailles variables mais tous du même type.
+2) Un vecteur à la C c'est quoi exactement pour être sur.
+3) On place en privé les différents tableaux du tableau principal ... (= on place tout ds un liste pré créée ?)
+4) Efficace et compacte ?
+5) il attend quoi exactement de l'opérateur <<
+6) taille globale =/= dimension ?  => taille globale = somme des =/= tailles ?
+7) vu qu'on désire accéder aux éléments par [] => demander comment ça se passe pour implémenter des [][], le premier [] va agir sur notre tableau initial puis le second sur les elements (qui nécéssite que la dfinition de base, il me sembe.)
+8) Exception => dans le cas d'une erreur on la throw et celle-ci peut être gérée au niveau supérieur ?
+9) méthodes spéciales = les 6 méthodes vues au cours ? 
+10) J'ai du mal à voir l'implémentation des spécification des templates ici.
+
+Sous-question n°1
+1) écrire une classe qui hérite de notre tableauMulti dont la taille max/min est fixée à la construction ?
+
+Sous-question n°2
+1) aide pour comprendre l'énoncé.
