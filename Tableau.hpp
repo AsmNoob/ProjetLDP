@@ -4,6 +4,7 @@
 #include <cstddef>  // nullptr_t, ptrdiff_t, size_t
 #include <cstdlib>  // abs, div, rand...
 #include <iostream> // cin, cout...
+#include <stdexcept> // out_of_range,... 
 
 
 // ----------- Classe Tableau ---------------- //
@@ -59,7 +60,6 @@ std::ostream& operator<< (std::ostream& out, const Tableau<T>& tab){
             out<<", ";
     }
     out<<" ]";
-    out<< std::endl;
     return out;
 }
 
@@ -101,8 +101,8 @@ public:
 
     TableauMulti& operator= (const TableauMulti<T,Dimension>& );        // opérateur d'assignation
     TableauMulti& operator= (TableauMulti<T,Dimension>&&);             // opérateur de transfert
-    inline T operator[] (ptrdiff_t ptr) const;          // opérateur []
-    inline T& operator[] (ptrdiff_t ptr);                // opérateur []
+    inline const Tableau<T> operator[] (ptrdiff_t ptr) const;          // opérateur []
+    //inline Tableau<T>& operator[] (ptrdiff_t ptr);                // opérateur []
 
     // Méthodes
     template < typename M, size_t Dim>
@@ -123,10 +123,24 @@ public:
 
 };
 
+template <typename T, size_t Dimension>
+const Tableau<T> TableauMulti<T,Dimension>::operator[] (std::ptrdiff_t i) const {
+  if (std::size_t(i) >= Dimension)
+    throw std::out_of_range ("TableauMulti : Index out of range"); // ne fonctionne pas avec std:: uniquement il a fallu #include <stdexcept>
+  return tableau_[i];
+}
+
+/*template <typename T, size_t Dimension>
+Tableau<T>& TableauMulti<T,Dimension>::operator[] (std::ptrdiff_t i) {
+  if (std::size_t(i) >= Dimension)
+    throw std::out_of_range("Vec : Index out of range");
+  return tableau_[i];
+}*/
+
 
 template < typename T, size_t Dim >
 std::ostream& operator<< (std::ostream& out, const TableauMulti<T,Dim>& tableau){
-    out << "[ "<< std::endl;
+    out << "[ ";
     for(std::size_t i = 0; i < Dim; ++i){
         out << tableau.tableau_[i];
         if(i < Dim-1)
