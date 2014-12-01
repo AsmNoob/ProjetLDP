@@ -41,6 +41,9 @@ public:
     template < typename M >
     friend std::ostream& operator<< (std::ostream&, const Tableau<M>&);
 
+    size_t getSize(){
+        return size_;
+    }
     
 
 };
@@ -104,6 +107,19 @@ public:
     // Méthodes
     template < typename M, size_t Dim>
     friend std::ostream& operator<< (std::ostream&, const TableauMulti<M,Dim>&);
+
+    std::size_t getSize(){
+        return Dimension;
+    }
+
+    std::size_t getSizeAll(){
+        std::size_t completeSize = 0;
+        for(std::size_t i = 0; i < Dimension;++i){
+            std::cout<<"Dimension tableau"<< i << ": " << tableau_[i].getSize() << std::endl;
+            completeSize+=tableau_[i].getSize();
+        }
+        return completeSize;
+    }
 
 };
 

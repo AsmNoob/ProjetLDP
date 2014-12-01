@@ -3,6 +3,7 @@
 #include <assert.h>
 
 int main(){ //int argc, char const *argv[] because they are unused
+	std::cout<<"//------------Constructeurs--------------//"<<std::endl;
 	int arraysTest[5] = {1,2,3,4,5};
 	std::size_t taille = 5; 
 	std::cout<<"Adresse aray: "<<arraysTest<<" Taille: "<<(sizeof(arraysTest)/sizeof(*arraysTest))<<std::endl;
@@ -13,12 +14,17 @@ int main(){ //int argc, char const *argv[] because they are unused
 	Tabl = Tableau<int>(taille,arraysTest); // ok
 	
 	std::cout << Tabl;
-	int arraysTest2[4] = {1,3,4,5};
+	int arraysTest2[4] = {1,2,3,4};
 	const std::size_t number = 4; // const cause template variable can't change
 	// TableauMulti (T* tableauDimensions)
 	TableauMulti<int,number> test = TableauMulti<int,number>(arraysTest2);
 	std::cout << test;
 	//assert(false);
-	std::cout<<"Problème Destructeurs"<<std::endl;
+	std::cout<<"//--------------Test méthodes GetSize, etc -------------//"<<std::endl;
+
+	std::cout<<"Taille tableauMulti: "<< test.getSize() << std::endl;
+	std::cout<<"Taille getALl: "<< test.getSizeAll()<<std::endl;
+
+	std::cout<<"//--------------Problème Destructeurs-----------------//"<<std::endl;
 	return 0;
 }
