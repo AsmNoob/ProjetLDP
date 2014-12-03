@@ -4,6 +4,7 @@ LDFLAGS=
 EXEC=main
 SRC= $(wildcard *.cpp)
 OBJ= $(SRC:.cpp=.o)
+HEADER=$(wildcard *.hpp)
 
 run: all
 	@echo -e "\e[0;31m================= Run ================\e[0m"
@@ -14,7 +15,7 @@ all: $(EXEC)
 $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-%.o: %.cpp
+%.o: %.cpp $(HEADER)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 .PHONY: clean mrproper

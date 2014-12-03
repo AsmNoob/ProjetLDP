@@ -4,7 +4,7 @@
 #include <cstddef>  // nullptr_t, ptrdiff_t, size_t
 #include <cstdlib>  // abs, div, rand...
 #include <iostream> // cin, cout...
-#include <stdexcept> // out_of_range,... 
+#include <stdexcept> // out_of_range,...
 
 
 // ----------- Classe Tableau ---------------- //
@@ -47,7 +47,7 @@ public:
     size_t getSize(){
         return size_;
     }
-    
+
 
 };
 
@@ -72,7 +72,6 @@ std::ostream& operator<< (std::ostream& out, const Tableau<T>& tab){
     //std::cout<<sizeof(tab);
     out << "[ ";
     for (size_t i = 0; i < tab.size_; ++i){
-        std::cout << "valeur: " << *p <<std::endl;
         out <<(*p++);
         if(i < tab.size_-1)
             out<<", ";
@@ -83,7 +82,7 @@ std::ostream& operator<< (std::ostream& out, const Tableau<T>& tab){
 
 // ----------- Classe TableauMulti --------------- //
 
-template < typename T, size_t Dimension = 1>  // 2 paramètres de template: type et nombre de tableaux 
+template < typename T, size_t Dimension = 1>  // 2 paramètres de template: type et nombre de tableaux
 class TableauMulti{
 private:
 
@@ -97,24 +96,27 @@ public:
 
     TableauMulti () = default;                                        // constructeur par défaut
     TableauMulti (T* tableauDimensions):tableau_(new Tableau<T>(Dimension)){
+        std::cout << "\e[0;31m Creation\e[0m" << std::endl;
         for(size_t i = 0; i < Dimension; ++i){
-            std::cout<< "Valeur de i: "<< i << std::endl;
             tableau_[i] = Tableau<T>(tableauDimensions[i]);
+            std::cout<< "Valeur de tabl[i]: "<< tableau_[i] << std::endl;
         }
+        std::cout<< "Valeur de tabl[0]: "<< tableau_[0] << std::endl;
+        std::cout << "\e[0;31mFin creation\e[0m" << std::endl;
     };                                 // constructeur par array de tailles des différentes listes
     TableauMulti (const TableauMulti<T,Dimension> & );                // constructeur de copie
     TableauMulti (TableauMulti<T,Dimension> &&);                      // constructeur de transfert
-    
+
 
     // Destructeur
 
     ~TableauMulti (){
-        
+
         /*for(std::size_t i = 0; i < Dimension;++i){
             delete tableau_[i];
         }
         delete[] tableau_;*/
-    }             
+    }
 
     // Surcharge d'opérateurs
 
