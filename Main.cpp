@@ -14,8 +14,8 @@ int main(){ //int argc, char const *argv[] because they are unused
 	Tabl = Tableau<int>(taille,arraysTest); // ok
 	
 	std::cout << Tabl;
-	int arraysTest2[4] = {1,2,3,4};
-	const std::size_t number = 4; // const cause template variable can't change
+	int arraysTest2[5] = {5,2,3,4,5};
+	const std::size_t number = 5; // const cause template variable can't change
 	// TableauMulti (T* tableauDimensions)
 	TableauMulti<int,number> test = TableauMulti<int,number>(arraysTest2);
 	std::cout << test;
@@ -24,6 +24,30 @@ int main(){ //int argc, char const *argv[] because they are unused
 
 	std::cout<<"Taille tableauMulti: "<< test.getSize() << std::endl;
 	std::cout<<"Taille getALl: "<< test.getSizeAll()<<std::endl;
+
+	std::cout<<"//--------------Test Opérateur[] -------------//"<<std::endl;
+
+	try{
+		std::cout<<"Objet Tableau de Tableau Multi[0][0]: "<< test[0]<<std::endl;
+	}catch(const std::out_of_range& err){
+		std::cout<< err.what() <<std::endl;
+	}
+
+	try{
+		std::cout<<"Objet Tableau de Tableau Multi[3][2] avant assignation : "<< test[3][2]<<std::endl;
+		test[3][2] = 3;
+		std::cout<<"Objet Tableau de Tableau Multi[3][2] après assignation: "<< test[3][2]<<std::endl;
+	}catch(const std::out_of_range& err){
+		std::cout<< err.what() <<std::endl;
+	}	
+
+	std::cout<<"//--------------Test assignation Tableau-----------------//"<<std::endl;
+
+	std::cout << "Test Affichage complet: " << test << std::endl;
+
+	std::cout<<"Check de la valeur test[0] avant : "<<test[0] << std::endl;
+	test[0] = Tab;
+	std::cout<<"Check de la valeur test[0] après : "<<test[0] << std::endl;
 
 	std::cout<<"//--------------Problème Destructeurs-----------------//"<<std::endl;
 	return 0;

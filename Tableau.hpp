@@ -34,6 +34,8 @@ public:
     Tableau (Tableau&&) = default;                            // constructeur de transfert
     Tableau& operator= (const Tableau&) = default;            // opérateur d'assignation
     Tableau& operator= (Tableau&&)= default;                  // opérateur de transfert
+    inline const T operator[] (ptrdiff_t ptr) const;          // opérateur []
+    inline T& operator[] (ptrdiff_t ptr);                     // opérateur []
     ~Tableau() = default;
     //~Tableau(){delete[] tab_;}; Problème avec le destructeur
 
@@ -49,13 +51,29 @@ public:
 
 };
 
+template <typename T>
+const T Tableau<T>::operator[] (std::ptrdiff_t i) const {
+  if (std::size_t(i) >= size_)
+    throw std::out_of_range("Tableau : Index out of range");
+  return tab_[i];
+}
+
+template <typename T>
+T& Tableau<T>::operator[] (std::ptrdiff_t i) {
+  if (std::size_t(i) >= size_)
+    throw std::out_of_range("Tableau : Index out of range");
+  return tab_[i];
+}
+
+
 template < typename T >
 std::ostream& operator<< (std::ostream& out, const Tableau<T>& tab){
     T *p = tab.tab_; // pointeur vers le début de l'array
     //std::cout<<sizeof(tab);
     out << "[ ";
     for (size_t i = 0; i < tab.size_; ++i){
-        out <<*p++;
+        std::cout << "valeur: " << *p <<std::endl;
+        out <<(*p++);
         if(i < tab.size_-1)
             out<<", ";
     }
@@ -80,6 +98,7 @@ public:
     TableauMulti () = default;                                        // constructeur par défaut
     TableauMulti (T* tableauDimensions):tableau_(new Tableau<T>(Dimension)){
         for(size_t i = 0; i < Dimension; ++i){
+            std::cout<< "Valeur de i: "<< i << std::endl;
             tableau_[i] = Tableau<T>(tableauDimensions[i]);
         }
     };                                 // constructeur par array de tailles des différentes listes
@@ -102,7 +121,7 @@ public:
     TableauMulti& operator= (const TableauMulti<T,Dimension>& );        // opérateur d'assignation
     TableauMulti& operator= (TableauMulti<T,Dimension>&&);             // opérateur de transfert
     inline const Tableau<T> operator[] (ptrdiff_t ptr) const;          // opérateur []
-    //inline Tableau<T>& operator[] (ptrdiff_t ptr);                // opérateur []
+    inline Tableau<T>& operator[] (ptrdiff_t ptr);                // opérateur []
 
     // Méthodes
     template < typename M, size_t Dim>
@@ -130,12 +149,12 @@ const Tableau<T> TableauMulti<T,Dimension>::operator[] (std::ptrdiff_t i) const 
   return tableau_[i];
 }
 
-/*template <typename T, size_t Dimension>
+template <typename T, size_t Dimension>
 Tableau<T>& TableauMulti<T,Dimension>::operator[] (std::ptrdiff_t i) {
   if (std::size_t(i) >= Dimension)
-    throw std::out_of_range("Vec : Index out of range");
+    throw std::out_of_range("TableauMulti : Index out of range");
   return tableau_[i];
-}*/
+}
 
 
 template < typename T, size_t Dim >
