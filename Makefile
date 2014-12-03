@@ -1,22 +1,25 @@
-CC=gcc
-CFLAGS=-W -Wall -ansi -pedantic
+CC=g++
+CFLAGS=-std=c++11 -ggdb3 -Wpedantic -Wall -Wextra -Winit-self -Winline -Wconversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wconversion -Wsign-promo -Wzero-as-null-pointer-constant
 LDFLAGS=
-EXEC=Main
-SRC= $(wildcard *.c)
-OBJ= $(SRC:.c=.o)
+EXEC=main
+SRC= $(wildcard *.cpp)
+OBJ= $(SRC:.cpp=.o)
+
+run: all
+	@echo -e "\e[0;31m================= Run ================\e[0m"
+	./$(EXEC)
 
 all: $(EXEC)
 
-main: $(OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS)
+$(EXEC): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-%.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+%.o: %.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o
-
-mrproper: clean
-	rm -rf $(EXEC)
+	@echo Removed $(EXEC) and $(OBJ)
+	@rm -rf *.o
+	@rm -rf $(EXEC)
