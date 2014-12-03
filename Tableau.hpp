@@ -12,27 +12,26 @@
 template < typename T >
 class Tableau{
 
-private:
-
-    // Attributs
-
-    T* tab_;
-    std::size_t size_;
-
 public:
 
     // Constructeurs
 
     Tableau() = default;
-    Tableau(std::size_t size = 0):tab_(new T[size]),size_(size){
-        std::cout<<"Constructeur par taille, taille: "<< size_ <<std::endl;
-    }                // constructeur par dimension
-    Tableau(std::size_t size, T* tableau):tab_(tableau),size_(size) {
-        std::cout<<"Constructeur par tableau, taille: "<< size_ <<std::endl;
-    }                       // constructeur avec une array
-    Tableau (const Tableau&) = default;                       // constructeur de copie
-    Tableau (Tableau&&) = default;                            // constructeur de transfert
-    Tableau& operator= (const Tableau&) = default;            // opérateur d'assignation
+    Tableau(std::size_t size = 0):size_(size),tab_(new T[size]){}                // constructeur par dimension
+    Tableau(std::size_t size, T* tableau):size_(size),tab_(tableau){}                       // constructeur avec une array
+    Tableau (const Tableau<int>& tableau):size_(tableau.size_),tab_(new T[tableau.size_]){
+        for(std::size_t i = 0; i < tableau.size_ ;i++){
+            tab_[i] = tableau.tab_[i];
+        }
+    }                                   // constructeur de copie
+    Tableau (Tableau<int>&& tableau):size_(tableau.size_),tab_(tableau.tab_){
+        tableau.size_ = 0;
+        tableau.tab_ = nullptr;
+    }                            // constructeur de transfert
+    
+    // Opérateurs 
+
+    Tableau& operator= (const Tableau& );                     // opérateur d'assignation
     Tableau& operator= (Tableau&&)= default;                  // opérateur de transfert
     inline const T operator[] (ptrdiff_t ptr) const;          // opérateur []
     inline T& operator[] (ptrdiff_t ptr);                     // opérateur []
@@ -44,12 +43,33 @@ public:
     template < typename M >
     friend std::ostream& operator<< (std::ostream&, const Tableau<M>&);
 
-    size_t getSize(){
+    std::size_t getSize(){
         return size_;
     }
 
+    private:
+
+    // Attributs
+
+    std::size_t size_;
+    T* tab_;
+
+
 
 };
+
+template < typename T >
+Tableau<T>& Tableau<T>::operator= (const Tableau& tableau){
+    if (this != &tableau) {
+        //delete[] tab_; ?? Pourquoi le prof l'a ajouté ?
+        tab_ = new T[tableau.size_];
+        size_ = tableau.size_;
+        for(std::size_t i = 0; i < tableau.size_ ;i++){
+            tab_[i] = tableau.tab_[i];
+        }
+    }
+    return *this;
+}  
 
 template <typename T>
 const T Tableau<T>::operator[] (std::ptrdiff_t i) const {
@@ -94,7 +114,9 @@ public:
 
     // Constructeurs
 
-    TableauMulti () = default;                                        // constructeur par défaut
+    TableauMulti (){
+        tableau_[0] = new Tableau<T>(DIMENSION);
+    }                                      // constructeur par défaut
     TableauMulti (T* tableauDimensions){
         std::cout << "\033[0;31m Creation\033[0m" << std::endl;
         for(size_t i = 0; i < DIMENSION; ++i){
@@ -104,7 +126,9 @@ public:
         std::cout<< "Valeur de tabl[0]: "<< *tableau_[0] << std::endl;
         std::cout << "\033[0;31mFin creation\033[0m" << std::endl;
     };                                 // constructeur par array de tailles des différentes listes
-    TableauMulti (const TableauMulti<T,DIMENSION> & );                // constructeur de copie
+    TableauMulti (const TableauMulti<T,DIMENSION>& tableau){ // constructeur de copie
+
+    }                
     TableauMulti (TableauMulti<T,DIMENSION> &&);                      // constructeur de transfert
 
 

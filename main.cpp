@@ -3,18 +3,59 @@
 #include <assert.h>
 
 int main(){ //int argc, char const *argv[] because they are unused
-    std::cout<<"//------------Constructeurs--------------//"<<std::endl;
-    int arraysTest[5] = {1,2,3,4,5};
-    std::size_t taille = 5;
-    std::cout<<"Adresse aray: "<<arraysTest<<" Taille: "<<(sizeof(arraysTest)/sizeof(*arraysTest))<<std::endl;
-    //TEST1
-    Tableau<int> Tab = Tableau<int>(taille,arraysTest);
-    // TEST 2
-    Tableau<int> Tabl(taille); // je comprends pas très bien
-    Tabl = Tableau<int>(taille,arraysTest); // ok
 
-    std::cout << Tabl;
-    int arraysTest2[5] = {5,2,3,4,5};
+    std::cout<<"//------------Constructeurs--------------//"<<std::endl;
+    std::cout<<std::endl<<"1. Constructeur de tableau avec une array"<<std::endl<<std::endl;
+
+    int arraysTest0[5] = {1,2,3,4,5};
+    std::size_t taille = 5;
+
+    std::cout<<"Array: [";
+    for(size_t i = 0; i < taille; i++){
+        std::cout<<arraysTest0[i]<<" ";
+    }
+    std::cout<<"] et taille: "<<taille<<std::endl;
+    
+    //TEST1
+    Tableau<int> Tab = Tableau<int>(taille,arraysTest0);
+    std::cout<< "==> "<<Tab<<std::endl;
+    std::cout<<std::endl<<"2. Constructeur Tableau avec une taille: "<< taille<<std::endl<<std::endl;
+    // TEST 2
+    Tableau<int> Tabl = Tableau<int>(taille); 
+    std::cout<<Tabl<<std::endl;
+    
+    std::cout<<std::endl<<"3. Constructeur de copie Tableau : "<< taille<<std::endl<<std::endl;
+
+    std::cout << "Init Tableau qui va être copié: " << Tab << std::endl;
+
+    Tableau<int> Table = Tableau<int>(Tab);
+
+    std::cout << "Tableau après avoir été par constructeur de copie: " << Table << std::endl;
+
+    std::cout<<std::endl<<"4. Opérateur d'assignation  "<<std::endl<<std::endl;
+
+    int arraysTest1[5] = {1,1,1,1,1};
+
+    Tableau<int> Tablea = Tableau<int>(taille,arraysTest1);
+
+    std::cout<<"Tableau avant assignation: "<<Tablea<<std::endl;
+
+    Tablea = Table;
+
+    std::cout<<"Tableau après assignation: "<<Tablea<<std::endl;
+
+    std::cout<<std::endl<<"5. Opérateur de transfert "<<std::endl<<std::endl;
+
+
+    
+    std::cout<<std::endl<<"X. Constructeur de copie TableauMulti : "<< taille<<std::endl<<std::endl;
+
+    std::cout<<"Test Constructeur Tableau de taille 5, avec une array: "<< Tabl<<std::endl;;
+    TableauMulti<char> test0 = TableauMulti<char>();
+    std::cout<<"Test Constructeur TableauUlti de taille 1: "<<test0<<std::endl;
+
+    std::cout << Tabl<<std::endl;
+    int arraysTest2[5] = {1,2,3,4,5};
     const std::size_t number = 5; // const cause template variable can't change
     // TableauMulti (T* tableauDimensions)
     TableauMulti<int,number> test = TableauMulti<int,number>(arraysTest2);
