@@ -82,37 +82,37 @@ std::ostream& operator<< (std::ostream& out, const Tableau<T>& tab){
 
 // ----------- Classe TableauMulti --------------- //
 
-template < typename T, size_t Dimension = 1>  // 2 paramètres de template: type et nombre de tableaux
+template < typename T, size_t DIMENSION = 1>  // 2 paramètres de template: type et nombre de tableaux
 class TableauMulti{
 private:
 
     // Attributs
 
-    Tableau<T>* tableau_; // tableau qui va contenir tous les autres tableaux
+    Tableau<T>* tableau_[DIMENSION]; // tableau qui va contenir tous les autres tableaux
 
 public:
 
     // Constructeurs
 
     TableauMulti () = default;                                        // constructeur par défaut
-    TableauMulti (T* tableauDimensions):tableau_(new Tableau<T>(Dimension)){
-        std::cout << "\e[0;31m Creation\e[0m" << std::endl;
-        for(size_t i = 0; i < Dimension; ++i){
-            tableau_[i] = Tableau<T>(tableauDimensions[i]);
-            std::cout<< "Valeur de tabl[i]: "<< tableau_[i] << std::endl;
+    TableauMulti (T* tableauDimensions){
+        std::cout << "\033[0;31m Creation\033[0m" << std::endl;
+        for(size_t i = 0; i < DIMENSION; ++i){
+            tableau_[i] = new Tableau<T>(tableauDimensions[i]); // new pour éviter la destruction de l'objet créé après le scope du for
+            std::cout<< "Valeur de tabl[i]: "<< *tableau_[i] << std::endl;
         }
-        std::cout<< "Valeur de tabl[0]: "<< tableau_[0] << std::endl;
-        std::cout << "\e[0;31mFin creation\e[0m" << std::endl;
+        std::cout<< "Valeur de tabl[0]: "<< *tableau_[0] << std::endl;
+        std::cout << "\033[0;31mFin creation\033[0m" << std::endl;
     };                                 // constructeur par array de tailles des différentes listes
-    TableauMulti (const TableauMulti<T,Dimension> & );                // constructeur de copie
-    TableauMulti (TableauMulti<T,Dimension> &&);                      // constructeur de transfert
+    TableauMulti (const TableauMulti<T,DIMENSION> & );                // constructeur de copie
+    TableauMulti (TableauMulti<T,DIMENSION> &&);                      // constructeur de transfert
 
 
     // Destructeur
 
     ~TableauMulti (){
 
-        /*for(std::size_t i = 0; i < Dimension;++i){
+        /*for(std::size_t i = 0; i < DIMENSION;++i){
             delete tableau_[i];
         }
         delete[] tableau_;*/
@@ -120,8 +120,8 @@ public:
 
     // Surcharge d'opérateurs
 
-    TableauMulti& operator= (const TableauMulti<T,Dimension>& );        // opérateur d'assignation
-    TableauMulti& operator= (TableauMulti<T,Dimension>&&);             // opérateur de transfert
+    TableauMulti& operator= (const TableauMulti<T,DIMENSION>& );        // opérateur d'assignation
+    TableauMulti& operator= (TableauMulti<T,DIMENSION>&&);             // opérateur de transfert
     inline const Tableau<T> operator[] (ptrdiff_t ptr) const;          // opérateur []
     inline Tableau<T>& operator[] (ptrdiff_t ptr);                // opérateur []
 
@@ -130,32 +130,32 @@ public:
     friend std::ostream& operator<< (std::ostream&, const TableauMulti<M,Dim>&);
 
     std::size_t getSize(){
-        return Dimension;
+        return DIMENSION;
     }
 
     std::size_t getSizeAll(){
         std::size_t completeSize = 0;
-        for(std::size_t i = 0; i < Dimension;++i){
-            std::cout<<"Dimension tableau"<< i << ": " << tableau_[i].getSize() << std::endl;
-            completeSize+=tableau_[i].getSize();
+        for(std::size_t i = 0; i < DIMENSION;++i){
+            std::cout<<"Dimension tableau"<< i << ": " << tableau_[i]->getSize() << std::endl;
+            completeSize+=tableau_[i]->getSize();
         }
         return completeSize;
     }
 
 };
 
-template <typename T, size_t Dimension>
-const Tableau<T> TableauMulti<T,Dimension>::operator[] (std::ptrdiff_t i) const {
-  if (std::size_t(i) >= Dimension)
+template <typename T, size_t DIMENSION>
+const Tableau<T> TableauMulti<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {
+  if (std::size_t(i) >= DIMENSION)
     throw std::out_of_range ("TableauMulti : Index out of range"); // ne fonctionne pas avec std:: uniquement il a fallu #include <stdexcept>
-  return tableau_[i];
+  return *tableau_[i];
 }
 
-template <typename T, size_t Dimension>
-Tableau<T>& TableauMulti<T,Dimension>::operator[] (std::ptrdiff_t i) {
-  if (std::size_t(i) >= Dimension)
+template <typename T, size_t DIMENSION>
+Tableau<T>& TableauMulti<T,DIMENSION>::operator[] (std::ptrdiff_t i) {
+  if (std::size_t(i) >= DIMENSION)
     throw std::out_of_range("TableauMulti : Index out of range");
-  return tableau_[i];
+  return *tableau_[i];
 }
 
 
@@ -163,7 +163,7 @@ template < typename T, size_t Dim >
 std::ostream& operator<< (std::ostream& out, const TableauMulti<T,Dim>& tableau){
     out << "[ ";
     for(std::size_t i = 0; i < Dim; ++i){
-        out << tableau.tableau_[i];
+        out << *tableau.tableau_[i];
         if(i < Dim-1)
             out<<", ";
     }
