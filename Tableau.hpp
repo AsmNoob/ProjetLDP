@@ -32,7 +32,7 @@ public:
     // Opérateurs 
 
     Tableau& operator= (const Tableau& );                     // opérateur d'assignation
-    Tableau& operator= (Tableau&&)= default;                  // opérateur de transfert
+    Tableau& operator= (Tableau&&);                  // opérateur de transfert
     inline const T operator[] (ptrdiff_t ptr) const;          // opérateur []
     inline T& operator[] (ptrdiff_t ptr);                     // opérateur []
     ~Tableau() = default;
@@ -58,6 +58,17 @@ public:
 
 };
 
+template <typename T >
+Tableau<T>& Tableau<T>::operator= (Tableau&& tableau) {
+  if (this != &tableau) {
+    size_ = tableau.size_;
+    //delete[] tab_;
+    tab_ = tableau.tab_; // pointe vers la même adresse
+    tableau.size_ = 0; tableau.tab_ = nullptr;
+  }
+  return *this;
+}
+
 template < typename T >
 Tableau<T>& Tableau<T>::operator= (const Tableau& tableau){
     if (this != &tableau) {
@@ -69,7 +80,7 @@ Tableau<T>& Tableau<T>::operator= (const Tableau& tableau){
         }
     }
     return *this;
-}  
+}
 
 template <typename T>
 const T Tableau<T>::operator[] (std::ptrdiff_t i) const {
@@ -126,8 +137,11 @@ public:
         std::cout<< "Valeur de tabl[0]: "<< *tableau_[0] << std::endl;
         std::cout << "\033[0;31mFin creation\033[0m" << std::endl;
     };                                 // constructeur par array de tailles des différentes listes
-    TableauMulti (const TableauMulti<T,DIMENSION>& tableau){ // constructeur de copie
+    TableauMulti (const TableauMulti<T,DIMENSION>& tableau)/*:tableau_(new Tableau<T>(DIMENSION))*/{          // constructeur de copie
+        for(std::size_t i = 0; i < DIMENSION; i++){
 
+            tableau_[i] = new Tableau<T>(*tableau.tableau_[i]);
+        }
     }                
     TableauMulti (TableauMulti<T,DIMENSION> &&);                      // constructeur de transfert
 
@@ -167,6 +181,42 @@ public:
     }
 
 };
+
+template< typename T, size_t DIMENSION >
+TableauMulti<T,DIMENSION>& TableauMulti<T,DIMENSION>::operator= (const TableauMulti<T,DIMENSION>& tableau){
+    if(this != &tableau){
+        std::cout<<tableau;
+        for (std::size_t i = 0; i < DIMENSION; ++i){
+            std::cout<<" tableau.tableau_[i]: "<<*tableau.tableau_[i]<<std::endl;
+
+            tableau_[i] = new Tableau<T>(tableau.tableau_[i]->getSize());
+            std::cout<<" tableau_[i]: "<<*tableau_[i]<<std::endl;
+            *tableau_[i] = *tableau.tableau_[i];
+            std::cout<<" tableau.tableau_[i]: "<<*tableau.tableau_[i]<<std::endl;
+            std::cout<<" tableau_[i]: "<<*tableau_[i]<<std::endl;
+            // DEMANDER A ROM1 COMMENT UTILISER Lopérateur d'assignation créé précédemment
+            /*for (std::size_t j = 0; j < tableau.tableau_[i]->getSize(); ++j){
+                tableau_[i][j] = tableau.tableau_[i][j];
+            }*/
+        }
+    }
+    return *this;
+}
+
+
+
+/*template < typename T >
+Tableau<T>& Tableau<T>::operator= (const Tableau& tableau){
+    if (this != &tableau) {
+        //delete[] tab_; ?? Pourquoi le prof l'a ajouté ?
+        tab_ = new T[tableau.size_];
+        size_ = tableau.size_;
+        for(std::size_t i = 0; i < tableau.size_ ;i++){
+            tab_[i] = tableau.tab_[i];
+        }
+    }
+    return *this;
+}*/
 
 template <typename T, size_t DIMENSION>
 const Tableau<T> TableauMulti<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {

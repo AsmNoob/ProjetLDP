@@ -30,6 +30,15 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     Tableau<int> Table = Tableau<int>(Tab);
 
+    std::cout<<"Tab: "<<Tab<<std::endl;
+    std::cout<<"Table: "<<Table<<std::endl;
+
+    Tab[0] = 3;
+    std::cout<<"Changement ..."<<std::endl<<std::endl;
+
+    std::cout<<"Tab: "<<Tab<<std::endl;
+    std::cout<<"Table: "<<Table<<std::endl;
+
     std::cout << "Tableau après avoir été par constructeur de copie: " << Table << std::endl;
 
     std::cout<<std::endl<<"4. Opérateur d'assignation  "<<std::endl<<std::endl;
@@ -46,49 +55,97 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     std::cout<<std::endl<<"5. Opérateur de transfert "<<std::endl<<std::endl;
 
+    std::cout<<"//------------------------------------------------------------------------------------------//"<<std::endl;
+    
+    std::cout<<std::endl<<"1. Constructeur TableauMulti par défaut "<<std::endl<<std::endl;
+
+    TableauMulti<int> test0 = TableauMulti<int>();
+
+    std::cout<<"Tableau de dimension 1: "<< test0<<std::endl;
+
+    std::cout<<std::endl<<"2. Constructeur TableauMulti avec une array de tailles "<<std::endl<<std::endl;
+
+    int arraysTest2[5] = {1,2,3,4,5};
+    std::cout<<"Array: [";
+    for(size_t i = 0; i < taille; i++){
+        std::cout<<arraysTest2[i]<<" ";
+    }
+    std::cout<<"]"<<std::endl;
+    const std::size_t number = 5; // const cause template variable can't change
+    TableauMulti<int,number> tab = TableauMulti<int,number>(arraysTest2);
+
+    std::cout<<"TableauMulti: "<<tab<<std::endl;
+
+    std::cout<<std::endl<<"3. Constructeur de copie de TableauMulti"<<std::endl<<std::endl;
+
+    TableauMulti<int,number> tabl = TableauMulti<int,number>(tab);
+
+
+    std::cout<<"tab: "<<tab<<std::endl;
+    std::cout<<"tabl: "<<tabl<<std::endl;
+
+    tab[0][0] = 1;
+    std::cout<<"Changement ..."<<std::endl<<std::endl;
+
+    std::cout<<"tab: "<<tab<<std::endl;
+    std::cout<<"tabl: "<<tabl<<std::endl;
 
     
-    std::cout<<std::endl<<"X. Constructeur de copie TableauMulti : "<< taille<<std::endl<<std::endl;
 
-    std::cout<<"Test Constructeur Tableau de taille 5, avec une array: "<< Tabl<<std::endl;;
-    TableauMulti<char> test0 = TableauMulti<char>();
-    std::cout<<"Test Constructeur TableauUlti de taille 1: "<<test0<<std::endl;
+    std::cout<<std::endl<<"4. Opérateur d'assignation"<<std::endl<<std::endl;
 
-    std::cout << Tabl<<std::endl;
-    int arraysTest2[5] = {1,2,3,4,5};
-    const std::size_t number = 5; // const cause template variable can't change
-    // TableauMulti (T* tableauDimensions)
-    TableauMulti<int,number> test = TableauMulti<int,number>(arraysTest2);
-    std::cout << test;
-    //assert(false);
+     std::cout<<"//--------------Test méthodes GetSize DANS OP ASSIGNATION -------------//"<<std::endl;
+
+    std::cout<<"Tableau qui va être assigné (tabl): "<<tabl<<std::endl;
+
+    std::cout<<"Tableau qui utilisé pour la construction par copie (tab): "<<tab<<std::endl;
+
+    TableauMulti<int,number> tablea = TableauMulti<int,number>(tab);
+
+
+
+    std::cout<<"Tableau avant assignation(tablea), avant attribution de 3: "<<tablea<<std::endl;
+    tablea[3][2] = 3;
+
+    std::cout<<"Tableau avant assignation(tablea): "<<tablea<<std::endl;
+
+    std::cout<<"Tableau que l'on va assigner: "<<tabl<<std::endl;
+
+    tablea = tabl;
+
+    std::cout<<"Tableau après assignation(devenu tabl): "<<tablea<<std::endl;
+    
     std::cout<<"//--------------Test méthodes GetSize, etc -------------//"<<std::endl;
 
-    std::cout<<"Taille tableauMulti: "<< test.getSize() << std::endl;
-    std::cout<<"Taille getALl: "<< test.getSizeAll()<<std::endl;
+    std::cout<<"TableauMulti: "<<tabl<<std::endl;
+    std::cout<<"Taille tableauMulti: "<< tabl.getSize() << std::endl;
+    std::cout<<"Taille getALl: "<< tabl.getSizeAll()<<std::endl;
 
     std::cout<<"//--------------Test Opérateur[] -------------//"<<std::endl;
 
     try{
-        std::cout<<"Objet Tableau de Tableau Multi[0][0]: "<< test[0]<<std::endl;
+        std::cout<<"Objet Tableau de Tableau Multi[0][0]: "<< tabl[0]<<std::endl;
     }catch(const std::out_of_range& err){
         std::cout<< err.what() <<std::endl;
     }
 
     try{
-        std::cout<<"Objet Tableau de Tableau Multi[3][2] avant assignation : "<< test[3][2]<<std::endl;
-        test[3][2] = 3;
-        std::cout<<"Objet Tableau de Tableau Multi[3][2] après assignation: "<< test[3][2]<<std::endl;
+        std::cout<<"Objet Tableau de Tableau Multi[3][2] avant assignation : "<< tabl[3][2]<<std::endl;
+        tabl[3][2] = 0;
+        std::cout<<"Objet Tableau de Tableau Multi[3][2] après assignation: "<< tabl[3][2]<<std::endl;
     }catch(const std::out_of_range& err){
         std::cout<< err.what() <<std::endl;
     }
 
-    std::cout<<"//--------------Test assignation Tableau-----------------//"<<std::endl;
+    std::cout<<tabl<<std::endl;
 
-    std::cout << "Test Affichage complet: " << test << std::endl;
+    /*std::cout<<"//--------------Test assignation Tableau-----------------//"<<std::endl;
 
-    std::cout<<"Check de la valeur test[0] avant : "<<test[0] << std::endl;
-    test[0] = Tab;
-    std::cout<<"Check de la valeur test[0] après : "<<test[0] << std::endl;
+    std::cout << "Test Affichage complet: " << tabl << std::endl;
+
+    std::cout<<"Check de la valeur test[0] avant : "<<tabl[0] << std::endl;
+    tabl[0] = Tab;
+    std::cout<<"Check de la valeur test[0] après : "<<tabl[0] << std::endl;*/
 
     std::cout<<"//--------------Problème Destructeurs-----------------//"<<std::endl;
     return 0;
