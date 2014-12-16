@@ -140,7 +140,7 @@ public:
     TableauMulti (const TableauMulti<T,DIMENSION>& tableau)/*:tableau_(new Tableau<T>(DIMENSION))*/{          // constructeur de copie
         for(std::size_t i = 0; i < DIMENSION; i++){
 
-            tableau_[i] = new Tableau<T>(*tableau.tableau_[i]);
+            tableau_[i] = new Tableau<T>(*tableau.tableau_[i]); // DEEPCOPY !!
         }
     }                
     TableauMulti (TableauMulti<T,DIMENSION> &&);                      // constructeur de transfert
@@ -187,13 +187,9 @@ TableauMulti<T,DIMENSION>& TableauMulti<T,DIMENSION>::operator= (const TableauMu
     if(this != &tableau){
         std::cout<<tableau;
         for (std::size_t i = 0; i < DIMENSION; ++i){
-            std::cout<<" tableau.tableau_[i]: "<<*tableau.tableau_[i]<<std::endl;
 
             tableau_[i] = new Tableau<T>(tableau.tableau_[i]->getSize());
-            std::cout<<" tableau_[i]: "<<*tableau_[i]<<std::endl;
             *tableau_[i] = *tableau.tableau_[i];
-            std::cout<<" tableau.tableau_[i]: "<<*tableau.tableau_[i]<<std::endl;
-            std::cout<<" tableau_[i]: "<<*tableau_[i]<<std::endl;
             // DEMANDER A ROM1 COMMENT UTILISER Lopérateur d'assignation créé précédemment
             /*for (std::size_t j = 0; j < tableau.tableau_[i]->getSize(); ++j){
                 tableau_[i][j] = tableau.tableau_[i][j];

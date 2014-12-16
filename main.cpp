@@ -4,6 +4,8 @@
 
 int main(){ //int argc, char const *argv[] because they are unused
 
+    std::cout<<"//------------Tests Problème de base--------------//"<<std::endl;
+    
     std::cout<<"//------------Constructeurs--------------//"<<std::endl;
     std::cout<<std::endl<<"1. Constructeur de tableau avec une array"<<std::endl<<std::endl;
 
@@ -94,8 +96,6 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     std::cout<<std::endl<<"4. Opérateur d'assignation"<<std::endl<<std::endl;
 
-     std::cout<<"//--------------Test méthodes GetSize DANS OP ASSIGNATION -------------//"<<std::endl;
-
     std::cout<<"Tableau qui va être assigné (tabl): "<<tabl<<std::endl;
 
     std::cout<<"Tableau qui utilisé pour la construction par copie (tab): "<<tab<<std::endl;
@@ -103,17 +103,27 @@ int main(){ //int argc, char const *argv[] because they are unused
     TableauMulti<int,number> tablea = TableauMulti<int,number>(tab);
 
 
-
-    std::cout<<"Tableau avant assignation(tablea), avant attribution de 3: "<<tablea<<std::endl;
+    std::cout<<"Tableau avant assignation(tablea)après construction ( devrait être égal = tab): "<<tablea<<std::endl;
     tablea[3][2] = 3;
 
-    std::cout<<"Tableau avant assignation(tablea): "<<tablea<<std::endl;
+    std::cout<<"Tableau avant assignation(tablea), après ajout de 3: "<<tablea<<std::endl;
 
     std::cout<<"Tableau que l'on va assigner: "<<tabl<<std::endl;
 
     tablea = tabl;
 
     std::cout<<"Tableau après assignation(devenu tabl): "<<tablea<<std::endl;
+
+    std::cout<<"VERIFICATION: "<<std::endl;
+
+    std::cout<<"tablea: "<<tablea<<std::endl;
+    std::cout<<"tabl: "<<tabl<<std::endl;
+
+    tablea[0][0] = 6;
+    std::cout<<"Changement ..."<<std::endl<<std::endl;
+
+    std::cout<<"tablea: "<<tablea<<std::endl;
+    std::cout<<"tabl: "<<tabl<<std::endl;
     
     std::cout<<"//--------------Test méthodes GetSize, etc -------------//"<<std::endl;
 
@@ -124,28 +134,20 @@ int main(){ //int argc, char const *argv[] because they are unused
     std::cout<<"//--------------Test Opérateur[] -------------//"<<std::endl;
 
     try{
-        std::cout<<"Objet Tableau de Tableau Multi[0][0]: "<< tabl[0]<<std::endl;
+        std::cout<<"Objet Tableau de Tableau Multi[0][0]: "<< tabl[6]<<std::endl;
     }catch(const std::out_of_range& err){
         std::cout<< err.what() <<std::endl;
     }
 
     try{
         std::cout<<"Objet Tableau de Tableau Multi[3][2] avant assignation : "<< tabl[3][2]<<std::endl;
-        tabl[3][2] = 0;
+        tabl[3][2] = 6;
         std::cout<<"Objet Tableau de Tableau Multi[3][2] après assignation: "<< tabl[3][2]<<std::endl;
     }catch(const std::out_of_range& err){
         std::cout<< err.what() <<std::endl;
     }
 
     std::cout<<tabl<<std::endl;
-
-    /*std::cout<<"//--------------Test assignation Tableau-----------------//"<<std::endl;
-
-    std::cout << "Test Affichage complet: " << tabl << std::endl;
-
-    std::cout<<"Check de la valeur test[0] avant : "<<tabl[0] << std::endl;
-    tabl[0] = Tab;
-    std::cout<<"Check de la valeur test[0] après : "<<tabl[0] << std::endl;*/
 
     std::cout<<"//--------------Problème Destructeurs-----------------//"<<std::endl;
     return 0;
