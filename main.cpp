@@ -5,7 +5,7 @@
 int main(){ //int argc, char const *argv[] because they are unused
 
     std::cout<<"//------------Tests Problème de base--------------//"<<std::endl;
-    
+    /*
     std::cout<<"//------------Constructeurs--------------//"<<std::endl;
     std::cout<<std::endl<<"1. Constructeur de tableau avec une array"<<std::endl<<std::endl;
 
@@ -176,7 +176,7 @@ int main(){ //int argc, char const *argv[] because they are unused
         std::cout<< err.what() <<std::endl;
     }
 
-    std::cout<<tabl<<std::endl;
+    std::cout<<tabl<<std::endl;*/
 
     std::cout<<"//--------------Problème Destructeurs-----------------//"<<std::endl;
     return 0;

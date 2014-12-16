@@ -18,14 +18,14 @@ public:
 
     // Constructeurs
 
-    TableauCompact (){}                                                  // constructeur par défaut
-    TableauCompact (T* tableauDimensions){};                             // constructeur par array de tailles des différentes listes
-    TableauCompact (const TableauCompact<T,DIMENSION>& tableau){}        // constructeur de copie
-    TableauCompact (TableauCompact<T,DIMENSION> &&){}                    // constructeur de transfert
+    TableauCompact ();                                                   // constructeur par défaut
+    TableauCompact (T*);                                                 // constructeur par array de tailles des différentes listes
+    TableauCompact (const TableauCompact<T,DIMENSION>& );                // constructeur de copie
+    TableauCompact (TableauCompact<T,DIMENSION> &&);                     // constructeur de transfert
                                                   
     // Destructeur
 
-    ~TableauCompact (){}
+    ~TableauCompact ();
 
     // Surcharge d'opérateurs
 
@@ -39,5 +39,7 @@ public:
     friend std::ostream& operator<< (std::ostream&, const TableauCompact<M,Dim>&);
 
 };
+
+
 
 #endif
