@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Tableau.hpp"
+#include "TableauCompact.hpp"
 #include <assert.h>
 
 int main(){ //int argc, char const *argv[] because they are unused
