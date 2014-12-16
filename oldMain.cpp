@@ -39,35 +39,6 @@ int main(){ //int argc, char const *argv[] because they are unused
     std::cout<<"Changement ..."<<std::endl<<std::endl;
 
     std::cout<<"Tab: "<<Tab<<std::endl;
-    std::size_t taille = 5;
-
-    std::cout<<"Array: [";
-    for(size_t i = 0; i < taille; i++){
-        std::cout<<arraysTest0[i]<<" ";
-    }
-    std::cout<<"] et taille: "<<taille<<std::endl;
-    
-    //TEST1
-    Tableau<int> Tab = Tableau<int>(taille,arraysTest0);
-    std::cout<< "==> "<<Tab<<std::endl;
-    std::cout<<std::endl<<"2. Constructeur Tableau avec une taille: "<< taille<<std::endl<<std::endl;
-    // TEST 2
-    Tableau<int> Tabl = Tableau<int>(taille); 
-    std::cout<<Tabl<<std::endl;
-    
-    std::cout<<std::endl<<"3. Constructeur de copie Tableau : "<< taille<<std::endl<<std::endl;
-
-    std::cout << "Init Tableau qui va être copié: " << Tab << std::endl;
-
-    Tableau<int> Table = Tableau<int>(Tab);
-
-    std::cout<<"Tab: "<<Tab<<std::endl;
-    std::cout<<"Table: "<<Table<<std::endl;
-
-    Tab[0] = 3;
-    std::cout<<"Changement ..."<<std::endl<<std::endl;
-
-    std::cout<<"Tab: "<<Tab<<std::endl;
     std::cout<<"Table: "<<Table<<std::endl;
 
     std::cout << "Tableau après avoir été par constructeur de copie: " << Table << std::endl;
