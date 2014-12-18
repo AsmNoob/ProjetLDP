@@ -165,12 +165,13 @@ const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std
 
         TableauCompact<T,DIMENSION-1> tableau =  TableauCompact<T,DIMENSION-1>();
         T* copieTableau = new T[nouvelle_tailleTableau];
-        for(std::size_t j = i*sous_tailles_[0]; j < taille_tableau_;j++){
+        for(std::size_t j = i*sous_tailles_[0]; j < i*sous_tailles_[0]+nouvelle_tailleTableau;j++){
             copieTableau[j] = tableau_[j];
         }
         tableau.set_tableau(copieTableau);
         tableau.set_tailles(nouvelle_tailles);
         tableau.set_sousTailles(nouvelle_sousTailles);
+        tableau.set_tailleTableau(nouvelle_tailleTableau);
 
         return tableau;
     }
@@ -218,6 +219,10 @@ public:
 
     void set_sousTailles(int* sous_tailles){
         size_ = sous_tailles[0];
+    }
+
+    void set_tailleTableau(int taille){
+        size_ = taille;
     }
 
     // Destructeur
