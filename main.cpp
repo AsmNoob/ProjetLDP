@@ -78,10 +78,11 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     std::cout<<std::endl<<"1. Constructeur de tableau par assignation d'array"<<std::endl<<std::endl;
     const std::size_t taille_3 = 3;
+    int array0[3] = {4,2,3};
 
-    TableauCompact<int,taille_3> tableauDim3 = TableauCompact<int,taille_3>();
+    TableauCompact<int,taille_3> tableauDim3 = TableauCompact<int,taille_3>(array0);
 
-    //std::cout << "tableauDim1: " << tableauDim1 << std::endl;
+    //std::cout << "tableauDim3[0][0][0]: " << tableauDim3[0][0][0] << std::endl;
 
     /*
     std::cout<<"Array: [";

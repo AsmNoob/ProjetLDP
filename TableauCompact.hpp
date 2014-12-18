@@ -42,10 +42,9 @@ public:
 
     // Constructeurs
     TableauCompact ();
-    TableauCompact (std::size_t);                                        // constructeur par défaut
     TableauCompact (int*);                                               // constructeur par array de tailles des différentes listes
-    TableauCompact (const TableauCompact<T,DIMENSION>& );                // constructeur de copie
-    TableauCompact (TableauCompact<T,DIMENSION> &&);                     // constructeur de transfert
+    // TableauCompact (const TableauCompact<T,DIMENSION>& );                // constructeur de copie
+    // TableauCompact (TableauCompact<T,DIMENSION> &&);                     // constructeur de transfert
                                                   
     // Destructeur
 
@@ -53,50 +52,98 @@ public:
 
     // Surcharge d'opérateurs
 
-    TableauCompact& operator= (const TableauCompact<T,DIMENSION>& );         // opérateur d'assignation
-    TableauCompact& operator= (TableauCompact<T,DIMENSION>&&);               // opérateur de transfert
-    //inline const TableauSlice operator[] (ptrdiff_t ptr) const;             // opérateur []
+    // TableauCompact& operator= (const TableauCompact<T,DIMENSION>& );         // opérateur d'assignation
+    // TableauCompact& operator= (TableauCompact<T,DIMENSION>&&);               // opérateur de transfert
+    inline const TableauCompact<T,DIMENSION-1> operator[] (ptrdiff_t ptr) const;             // opérateur []
     // inline Tableau<T>& operator[] (ptrdiff_t ptr);                        // opérateur []
 
     // Méthodes
     template < typename M, std::size_t Dim>
     friend std::ostream& operator<< (std::ostream&, const TableauCompact<M,Dim>&);
 
-};
+    T* get_tableau(){
+        return tableau_;
+    }
 
+    void set_tableau(T* tableau){
+        tableau_ = tableau;
+    }
+
+    int* get_tailles(){
+        return tailles_;
+    }
+
+    void set_tailles(int* tailles){
+        for(std::size_t i = 0; i < DIMENSION; i++){
+            tailles_[i] = tailles[i];
+        }
+    }
+
+    int* get_sousTailles(){
+        return sous_tailles_;
+    }
+
+    void set_sousTailles(int* sous_tailles){
+        for(std::size_t i = 0; i < DIMENSION; i++){
+            sous_tailles_[i] = sous_tailles[i];
+        }
+    }
+
+};
+// Constructeurs
 template <typename T, std::size_t DIMENSION>
 TableauCompact<T,DIMENSION>::TableauCompact():tableau_(nullptr),tailleTableau_(0){}
 
-
-// Constructeur avec la dimension par défaut 1 et de taille donnée
+// Constructeur avec array contenant les tailles des dimensions
 template <typename T, std::size_t DIMENSION>
-TableauCompact<T,DIMENSION>::TableauCompact(std::size_t taille):tableau_(new T[taille]){}
+TableauCompact<T,DIMENSION>::TableauCompact(int* array){ // on ne peut pas initialiser tableau_ ici car on a besoin de parcourir l'array
+    std::cout << "\033[0;31mCreation\033[0m" << std::endl;
+        for(std::size_t i = 0; i < DIMENSION; i++){
+
+        tailleTableau_*=array[i]; // ensemble d'elements
+        tailles_[i] = array[i]; // enregistre les différentes tailes de chaque dimension
+    }
+    int valeur_sousTaille = 1;
+    for(std::size_t i = DIMENSION-1; i > 0; i--){
+        valeur_sousTaille*= tailles_[i];
+        sous_tailles_[i] = valeur_sousTaille;
+    }
+    tableau_ = new T[tailleTableau_];
+    std::cout << "\033[0;31mFin creation\033[0m" << std::endl;
+}
 
 // Destructeur
 template <typename T, std::size_t DIMENSION>
 TableauCompact<T,DIMENSION>::~TableauCompact(){
     delete tableau_;
 }
-// Constructeur avec array contenant les tailles des dimensions
-// ATTENTION Vérifier la valeur de DIMENSION .... quoique on va pas rentrer dans la boucle donc rien ne va être créé
-template <typename T, std::size_t DIMENSION>
-TableauCompact<T,DIMENSION>::TableauCompact(int* array)/*:tableau_(new T[])*/{ // on ne peut pas initialiser tableau_ ici car on a besoin de parcourir l'array
-    for(std::size_t i = 0; i < DIMENSION; i++){
-        tailleTableau_*=array[i];
-    }
-    tableau_ = new T[tailleTableau_];
-}
+
 
 //------------------//
-/*template <typename T, std::size_t DIMENSION>
-const TableauSlice TableauCompact<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {
+template <typename T, std::size_t DIMENSION>
+const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {
     if(i < 0 or i >= tailles_[0]){
         throw std::out_of_range("TableauCompact: Index out of range");
     }else{
-        TableauSlice<T,DIMENSION-1> tableau =  TableauSlice<T,DIMENSION-1>();
+        int nouvelle_tailles[DIMENSION-1];
+        int nouvelle_sousTailles[DIMENSION-1];
+        std::cout << "test nouvelles array tailles"<< std::endl;
+        for(std::size_t i = 0; i < (DIMENSION-1);i++){
+            nouvelle_tailles[i] = tailles_[i+1];
+            std::cout << "tailles[i]: " << tailles_[i] << std::endl;
+            nouvelle_sousTailles[i] = sous_tailles_[i+1];
+            std::cout << "sous_tailles[i]: " << sous_tailles_[i] << std::endl;
+        }
+
+        TableauCompact<T,DIMENSION-1> tableau =  TableauCompact<T,DIMENSION-1>();
+        tableau.set_tableau(tableau_+i*sous_tailles_[0]);
+        tableau.set_tailles(nouvelle_tailles);
+        tableau.set_sousTailles(nouvelle_sousTailles);
+
+
         return tableau;
     }
-}*/
+}
 //-------------------//
 
 //---------------------------------------------------------------------------------------------//
@@ -126,9 +173,28 @@ public:
     template < typename M >
     friend std::ostream& operator<< (std::ostream&, const TableauCompact<M,1>&);
 
+    T* get_tableau(){
+        return tableau_;
+    }
+
+    void set_tableau(T* tableau){
+        tableau_ = tableau;
+    }
+
+    void set_tailles(int* tailles){
+        size_ = tailles[0];
+    }
+
+    void set_sousTailles(int* sous_tailles){
+        size_ = sous_tailles[0];
+    }
+
     // Destructeur
     ~TableauCompact() = default;
 };
+
+template < typename T >
+TableauCompact<T,1>::TableauCompact():size_(0),tableau_(nullptr){}
 
 
 template < typename T>
@@ -211,7 +277,7 @@ std::ostream& operator<< (std::ostream& out, const TableauCompact<T,1>& tableau)
 // J'AVOUE NE PAS COMPRENDRE EXACTEMENT COMMENT FONCTIONNE LA SIGNATURE D'HERITAGE en regardant les exemples
 
 template < typename T,std::size_t DIMENSION>
-class TableauSlice/*<T,DIMENSION>*/ : public TableauCompact<T,DIMENSION>{
+class TableauSlice/*<T,DIMENSION>*/ /*: public TableauCompact<T,DIMENSION>*/{
 public:
     TableauSlice();
     // TableauSlice(TableauSlice&)
@@ -223,7 +289,7 @@ public:
 };
 
 template < typename T>
-class TableauSlice < T, 1 > : public TableauCompact<T>{
+class TableauSlice < T, 1 >/* : public TableauCompact<T>*/{
 public:
     TableauSlice();
     ~TableauSlice();
