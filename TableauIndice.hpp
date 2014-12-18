@@ -13,7 +13,7 @@ public:
     // TableauIndice(TableauIndice&)
     // TableauIndice(TableauIndice&&)
     inline const TableauIndice<T,DIMENSION-1,DIM> operator[] (ptrdiff_t) const;          // opérateur []
-    inline TableauIndice<T,DIMENSION-1,DIM>& operator[] (ptrdiff_t);                     // opérateur []
+    inline TableauIndice<T,DIMENSION-1,DIM> operator[] (ptrdiff_t);                     // opérateur []
 
     //~TableauIndice();
 
@@ -49,7 +49,7 @@ const TableauIndice<T,DIMENSION-1, DIM> TableauIndice<T,DIMENSION,DIM>::operator
 }          // opérateur []
 
 template < typename T, std::size_t DIMENSION,std::size_t DIM>
-TableauIndice<T,DIMENSION-1, DIM>& TableauIndice<T,DIMENSION,DIM>::operator[] (ptrdiff_t ptr){
+TableauIndice<T,DIMENSION-1, DIM> TableauIndice<T,DIMENSION,DIM>::operator[] (ptrdiff_t ptr){
     int decalage = decalage_;
     decalage += ptr * sous_tailles_[0];
     int tailles[DIMENSION-1];
@@ -61,7 +61,7 @@ TableauIndice<T,DIMENSION-1, DIM>& TableauIndice<T,DIMENSION,DIM>::operator[] (p
 
     //TableauIndice<T,DIMENSION-1,DIM> tableau = 
 
-    return &TableauIndice<T,DIMENSION-1,DIM>(tableau_,decalage,tailles,sous_tailles);
+    return TableauIndice<T,DIMENSION-1,DIM>(tableau_,decalage,tailles,sous_tailles);
 } 
 
 
@@ -80,7 +80,7 @@ public:
         tableau_->set_offset(decalage_,valeur);
     }
 
-    T& operator=(const T& valeur){this->set(valeur);return valeur;}
+    T operator=(const T& valeur){this->set(valeur);return valeur;}
 
     // Opéateur de cast
     operator T(){return get();}

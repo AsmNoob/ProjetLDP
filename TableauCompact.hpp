@@ -43,7 +43,7 @@ public:
     // TableauCompact& operator= (const TableauCompact<T,DIMENSION>& );         // opérateur d'assignation
     // TableauCompact& operator= (TableauCompact<T,DIMENSION>&&);               // opérateur de transfert
     inline const TableauIndice<T,DIMENSION-1,DIMENSION> operator[] (ptrdiff_t) const;             // opérateur []
-    inline TableauIndice<T,DIMENSION-1,DIMENSION>& operator[] (ptrdiff_t);                        // opérateur []
+    inline TableauIndice<T,DIMENSION-1,DIMENSION> operator[] (ptrdiff_t);                        // opérateur []
 
     // Méthodes
     template < typename M, std::size_t Dim>
@@ -163,7 +163,7 @@ const TableauIndice<T,DIMENSION-1,DIMENSION> TableauCompact<T,DIMENSION>::operat
 }
 
 template < typename T, std::size_t DIMENSION>
-TableauIndice<T,DIMENSION-1, DIMENSION>& TableauCompact<T,DIMENSION>::operator[] (ptrdiff_t ptr){
+TableauIndice<T,DIMENSION-1, DIMENSION> TableauCompact<T,DIMENSION>::operator[] (ptrdiff_t ptr){
     int decalage = ptr * sous_tailles_[0];
     int tailles[DIMENSION-1];
     int sous_tailles[DIMENSION-1];
@@ -183,7 +183,7 @@ std::ostream& operator<< (std::ostream& out, const TableauCompact<M,Dim>& tablea
                 out << std::string(Dim - j,'\n');
             }
         }
-        out << get_offset(i);
+        out << tableau.get_offset(i);
     }
 }
 
