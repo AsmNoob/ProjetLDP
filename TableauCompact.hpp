@@ -33,7 +33,7 @@ private:
     // Attributs
 
     T* tableau_; // array compacte qui contient toutes les valeurs 
-    std::size_t tailleTableau_; // taille complete de ce tableau en compacté
+    std::size_t taille_tableau_ = 1; // taille complete de ce tableau en compacté
     int tailles_[DIMENSION]; // array qui contient les tailles de chaque dimension
     int sous_tailles_[DIMENSION]; // contient les tailles des sous-dimensions
 
@@ -92,30 +92,50 @@ public:
 };
 // Constructeurs
 template <typename T, std::size_t DIMENSION>
-TableauCompact<T,DIMENSION>::TableauCompact():tableau_(nullptr),tailleTableau_(0){}
+TableauCompact<T,DIMENSION>::TableauCompact():tableau_(nullptr),taille_tableau_(0){}
 
 // Constructeur avec array contenant les tailles des dimensions
 template <typename T, std::size_t DIMENSION>
 TableauCompact<T,DIMENSION>::TableauCompact(int* array){ // on ne peut pas initialiser tableau_ ici car on a besoin de parcourir l'array
     std::cout << "\033[0;31mCreation\033[0m" << std::endl;
-        for(std::size_t i = 0; i < DIMENSION; i++){
-
-        tailleTableau_*=array[i]; // ensemble d'elements
+    for(std::size_t i = 0; i < DIMENSION; i++){
+        std::cout << " array["<<i<<"]: "<<array[i]; 
+        taille_tableau_*=array[i]; // ensemble d'elements
+        std::cout<< "taille_tableau_ :"<< taille_tableau_ <<std::endl;
         tailles_[i] = array[i]; // enregistre les différentes tailes de chaque dimension
     }
-    int valeur_sousTaille = 1;
-    for(std::size_t i = DIMENSION-1; i > 0; i--){
-        valeur_sousTaille*= tailles_[i];
-        sous_tailles_[i] = valeur_sousTaille;
+
+
+    std::cout<<std::endl << "\033[0;31mTest tailles_\033[0m" << std::endl;
+    for(std::size_t i = 0; i < DIMENSION;i++){
+        std::cout << " tailles_["<<i<<"]: "<<tailles_[i];
     }
-    tableau_ = new T[tailleTableau_];
-    std::cout << "\033[0;31mFin creation\033[0m" << std::endl;
+    tableau_ = new T[taille_tableau_];
+    std::cout<<std::endl << "\033[0;31mTest tableau_\033[0m" << std::endl;
+    for(std::size_t i = 0; i < taille_tableau_;i++){
+        std::cout << " tableau_["<<i<<"]: "<<tableau_[i];
+    }
+    int valeur_sousTaille = 1;
+    std::cout << "MIDDLE"<<std::endl;
+    for(std::size_t i = DIMENSION; i  > 0; i--){
+        std::cout<<"i: "<<i;
+        valeur_sousTaille*= tailles_[i-1];
+        sous_tailles_[i-1] = valeur_sousTaille;
+    }
+    std::cout<<std::endl << "\033[0;31mTest sous_tailles_\033[0m" << std::endl;
+    for(std::size_t i = 0; i < DIMENSION;i++){
+        std::cout << " sous_tailles_["<<i<<"]: "<<sous_tailles_[i];
+    }
+    
+    std::cout<<std::endl << "\033[0;31mFin creation\033[0m" << std::endl;
 }
 
 // Destructeur
 template <typename T, std::size_t DIMENSION>
 TableauCompact<T,DIMENSION>::~TableauCompact(){
     delete tableau_;
+    delete tailles_;
+    delete sous_tailles_;
 }
 
 
@@ -130,16 +150,15 @@ const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std
         std::cout << "test nouvelles array tailles"<< std::endl;
         for(std::size_t i = 0; i < (DIMENSION-1);i++){
             nouvelle_tailles[i] = tailles_[i+1];
-            std::cout << "tailles[i]: " << tailles_[i] << std::endl;
+            std::cout << "nouvelles_tailles["<<i<<"]: " << nouvelle_tailles[i] << std::endl;
             nouvelle_sousTailles[i] = sous_tailles_[i+1];
-            std::cout << "sous_tailles[i]: " << sous_tailles_[i] << std::endl;
+            std::cout << "nouvelles_sous_tailles["<<i<<"]: " << nouvelle_sousTailles[i] << std::endl;
         }
 
         TableauCompact<T,DIMENSION-1> tableau =  TableauCompact<T,DIMENSION-1>();
         tableau.set_tableau(tableau_+i*sous_tailles_[0]);
         tableau.set_tailles(nouvelle_tailles);
         tableau.set_sousTailles(nouvelle_sousTailles);
-
 
         return tableau;
     }
@@ -190,7 +209,9 @@ public:
     }
 
     // Destructeur
-    ~TableauCompact() = default;
+    ~TableauCompact(){
+        delete tableau_;
+    }
 };
 
 template < typename T >

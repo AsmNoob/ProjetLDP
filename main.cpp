@@ -82,7 +82,9 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     TableauCompact<int,taille_3> tableauDim3 = TableauCompact<int,taille_3>(array0);
 
-    //std::cout << "tableauDim3[0][0][0]: " << tableauDim3[0][0][0] << std::endl;
+    std::cout<<std::endl<<"Test valeurs du constructeur"<<std::endl<<std::endl;
+
+    std::cout << "tableauDim3[0][0][0]: " << tableauDim3[0][0][0] << std::endl;
 
     /*
     std::cout<<"Array: [";
@@ -251,6 +253,6 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     std::cout<<tabl<<std::endl;*/
 
-    std::cout<<"//--------------Problème Destructeurs-----------------//"<<std::endl;
+    std::cout<<"\n//--------------Problème Destructeurs-----------------//"<<std::endl;
     return 0;
 }
