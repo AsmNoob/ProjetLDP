@@ -4,14 +4,86 @@
 
 int main(){ //int argc, char const *argv[] because they are unused
 
-    std::cout<<"//------------Tests Problème de base--------------//"<<std::endl;
+    std::cout<<"//---------------------Tests Problème de base------------------------//"<<std::endl;
+        
+    std::cout<<"//------------ TableauMultiDimensionnel de dimension 1 --------------//"<<std::endl;
+
+
+    std::cout<<"//-------------------------Constructeurs--------------------------//"<<std::endl;
+
+
+    std::cout<<std::endl<<"1. Constructeur de tableau avec une dimension unitaire"<<std::endl<<std::endl;
+    const std::size_t taille_1 = 1;
+
+    TableauCompact<int,taille_1> tableauDim1 = TableauCompact<int,taille_1>(5);
+
+    std::cout << "tableauDim1: " << tableauDim1 << std::endl;
+
+    /*std::cout<<std::endl<<"b. Constructeur de tableau par défaut sans dimension par template"<<std::endl<<std::endl;
+
+    TableauCompact<int> tableauSansDim = TableauCompact<int>(5);*/
+
+    std::cout<<std::endl<<"2. Constructeur de tableau avec une array"<<std::endl<<std::endl;
+    std::size_t array_size = 3;
+    int array[3] = {1,2,3};
+
+    TableauCompact<int,taille_1> tableauDim1Array = TableauCompact<int,taille_1>(array,array_size);
+
+    std::cout << "tableauDim1Array: " << tableauDim1Array << std::endl;
+
+    std::cout<<std::endl<<"3. Constructeur de copie"<<std::endl<<std::endl;
+
+
+    TableauCompact<int,taille_1> tableauDim1Copie = TableauCompact<int,taille_1>(tableauDim1Array);
+
+    std::cout << "tableauDim1Copie: " << tableauDim1Copie << std::endl << std::endl;
+
+    std::cout << "Verification de la deepcopy" << std::endl;
+    std::cout << "---------------------------" << std::endl;
+
+    std::cout << "tableauDim1Array avt chgt: " << tableauDim1Array << std::endl;
+
+    tableauDim1Array[0] = 5;
+
+    std::cout << "tableauDim1Array après chgt: " << tableauDim1Array << std::endl;
+
+    std::cout << "tableauDim1Copie: " << tableauDim1Copie << std::endl;
+
+    std::cout<<std::endl<<"4. Constructeur de transfert"<<std::endl<<std::endl;
+
+    std::cout<<std::endl<<"5. Opérateur d'assignation "<<std::endl<<std::endl;
+
+    std::cout << "tableauDim1Copie Avant assignation" << tableauDim1Copie << std::endl;
+
+    tableauDim1Copie = tableauDim1Array;
+
+    std::cout << "tableauDim1Copie après assignation" << tableauDim1Copie << std::endl << std::endl;
+    std::cout << "Verification de la deepcopy" << std::endl;
+    std::cout << "---------------------------" << std::endl;
+
+    std::cout << "tableauDim1Array avt chgt: " << tableauDim1Array << std::endl;
+
+    tableauDim1Array[0] = 10;
+
+    std::cout << "tableauDim1Array après chgt: " << tableauDim1Array << std::endl;
+
+    std::cout << "tableauDim1Copie: " << tableauDim1Copie << std::endl;
+
+    std::cout<<std::endl<<"6. Opérateur de transfert "<<std::endl<<std::endl;
+
+    std::cout<<"//------------ TableauMultiDimensionnel de dimension DIMENSION --------------//"<<std::endl;
+
+
+    std::cout<<"//-------------------------Constructeurs--------------------------//"<<std::endl;
+
+    std::cout<<std::endl<<"1. Constructeur de tableau par assignation d'array"<<std::endl<<std::endl;
+    const std::size_t taille_3 = 3;
+
+    TableauCompact<int,taille_3> tableauDim3 = TableauCompact<int,taille_3>();
+
+    //std::cout << "tableauDim1: " << tableauDim1 << std::endl;
+
     /*
-    std::cout<<"//------------Constructeurs--------------//"<<std::endl;
-    std::cout<<std::endl<<"1. Constructeur de tableau avec une array"<<std::endl<<std::endl;
-
-    int arraysTest0[5] = {1,2,3,4,5};
-    std::size_t taille = 5;
-
     std::cout<<"Array: [";
     for(size_t i = 0; i < taille; i++){
         std::cout<<arraysTest0[i]<<" ";
