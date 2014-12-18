@@ -176,9 +176,16 @@ TableauIndice<T,DIMENSION-1, DIMENSION>& TableauCompact<T,DIMENSION>::operator[]
 } 
 
 template < typename M, std::size_t Dim>
-    friend std::ostream& operator<< (std::ostream& out, const TableauCompact<M,Dim>& tableau){
-
+std::ostream& operator<< (std::ostream& out, const TableauCompact<M,Dim>& tableau){
+    for(std::size_t i = 0; i < tableau.taille_tableau_;i++){
+        for(std::size_t j = 0; j < Dim-1;j++){
+            if(i % tableau.sous_tailles_[j] == 0){
+                out << std::string(Dim - j,'\n');
+            }
+        }
+        out << get_offset(i);
     }
+}
 
 //------------------//
 /*template <typename T, std::size_t DIMENSION>
