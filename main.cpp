@@ -89,9 +89,11 @@ int main(){ //int argc, char const *argv[] because they are unused
      int valeur = 3;
 
     tableauDim3[0][0][0] = valeur;
+    tableauDim3[1][0][0] = 4;
 
     std::cout << "tableauDim3[0][0][0]: " << tableauDim3[0][0][0] << std::endl;
 
+    std::cout << "tableauDim3: " << tableauDim3 << std::endl;
 
     /*
     std::cout<<"Array: [";

@@ -53,7 +53,7 @@ public:
         tableau_[decalage] = valeur;
     }
 
-    T get_offset(int decalage){
+    T get_offset(int decalage)const{
         return tableau_[decalage];
     }
 
@@ -180,7 +180,7 @@ std::ostream& operator<< (std::ostream& out, const TableauCompact<M,Dim>& tablea
     for(std::size_t i = 0; i < tableau.taille_tableau_;i++){
         for(std::size_t j = 0; j < Dim-1;j++){
             if(i % tableau.sous_tailles_[j] == 0){
-                out << std::string(Dim - j,'\n');
+                out << std::string(Dim - j-1,'\n');
             }
         }
         out << tableau.get_offset(i);
