@@ -78,6 +78,10 @@ public:
             sous_tailles_[i] = sous_tailles[i];
         }
     }
+
+    void set_tailleTableau(int taille){
+        taille_tableau_ = taille;
+    }
 private:
 
     // Attributs
@@ -118,11 +122,12 @@ TableauCompact<T,DIMENSION>::TableauCompact(int* array){ // on ne peut pas initi
     }
     int valeur_sousTaille = 1;
     std::cout << "MIDDLE"<<std::endl;
-    for(std::size_t i = DIMENSION; i  > 0; i--){
+    for(std::size_t i = DIMENSION-1; i  > 0; i--){
         std::cout<<"i: "<<i;
-        valeur_sousTaille*= tailles_[i-1];
+        valeur_sousTaille*= tailles_[i];
         sous_tailles_[i-1] = valeur_sousTaille;
     }
+    sous_tailles_[DIMENSION-1] = 1;
     std::cout<<std::endl << "\033[0;31mTest sous_tailles_\033[0m" << std::endl;
     for(std::size_t i = 0; i < DIMENSION;i++){
         std::cout << " sous_tailles_["<<i<<"]: "<<sous_tailles_[i];
@@ -147,15 +152,23 @@ const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std
         int nouvelle_tailles[DIMENSION-1];
         int nouvelle_sousTailles[DIMENSION-1];
         std::cout << "test nouvelles array tailles"<< std::endl;
-        for(std::size_t i = 0; i < (DIMENSION-1);i++){
-            nouvelle_tailles[i] = tailles_[i+1];
-            std::cout << "nouvelles_tailles["<<i<<"]: " << nouvelle_tailles[i] << std::endl;
-            nouvelle_sousTailles[i] = sous_tailles_[i+1];
-            std::cout << "nouvelles_sous_tailles["<<i<<"]: " << nouvelle_sousTailles[i] << std::endl;
+        for(std::size_t j = 0; j < (DIMENSION-1);j++){
+            nouvelle_tailles[j] = tailles_[j+1];
+            std::cout << "nouvelles_tailles["<<j<<"]: " << nouvelle_tailles[j] << std::endl;
+            nouvelle_sousTailles[j] = sous_tailles_[j+1];
+            std::cout << "nouvelles_sous_tailles["<<j<<"]: " << nouvelle_sousTailles[j] << std::endl;
+        }  
+        std::size_t nouvelle_tailleTableau = 1;
+        for(std::size_t j = 0; j < DIMENSION-1;j++){
+            nouvelle_tailleTableau*= nouvelle_tailles[j];
         }
 
         TableauCompact<T,DIMENSION-1> tableau =  TableauCompact<T,DIMENSION-1>();
-        tableau.set_tableau(tableau_+i*sous_tailles_[0]);
+        T* copieTableau = new T[nouvelle_tailleTableau];
+        for(std::size_t j = i*sous_tailles_[0]; j < taille_tableau_;j++){
+            copieTableau[j] = tableau_[j];
+        }
+        tableau.set_tableau(copieTableau);
         tableau.set_tailles(nouvelle_tailles);
         tableau.set_sousTailles(nouvelle_sousTailles);
 
