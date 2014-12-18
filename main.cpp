@@ -86,6 +86,13 @@ int main(){ //int argc, char const *argv[] because they are unused
 
     std::cout << "tableauDim3[0][0][0]: " << tableauDim3[0][0][0] << std::endl;
 
+     int valeur = 3;
+
+    tableauDim3[0][0][0] = valeur;
+
+    std::cout << "tableauDim3[0][0][0]: " << tableauDim3[0][0][0] << std::endl;
+
+
     /*
     std::cout<<"Array: [";
     for(size_t i = 0; i < taille; i++){

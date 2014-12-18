@@ -5,9 +5,7 @@
 #include <cstdlib>  // abs, div, rand...
 #include <iostream> // cin, cout...
 #include <stdexcept> // out_of_range,...
-
-
-
+#include "TableauIndice.hpp"
 
 
 // template < typename T, std::size_t DIMENSION = 1 >
@@ -44,12 +42,20 @@ public:
 
     // TableauCompact& operator= (const TableauCompact<T,DIMENSION>& );         // opérateur d'assignation
     // TableauCompact& operator= (TableauCompact<T,DIMENSION>&&);               // opérateur de transfert
-    inline const TableauCompact<T,DIMENSION-1> operator[] (ptrdiff_t ptr) const;             // opérateur []
-    // inline Tableau<T>& operator[] (ptrdiff_t ptr);                        // opérateur []
+    inline const TableauIndice<T,DIMENSION-1,DIMENSION> operator[] (ptrdiff_t) const;             // opérateur []
+    inline TableauIndice<T,DIMENSION-1,DIMENSION>& operator[] (ptrdiff_t);                        // opérateur []
 
     // Méthodes
     template < typename M, std::size_t Dim>
     friend std::ostream& operator<< (std::ostream&, const TableauCompact<M,Dim>&);
+
+    void set_offset(int decalage,T valeur){
+        tableau_[decalage] = valeur;
+    }
+
+    T get_offset(int decalage){
+        return tableau_[decalage];
+    }
 
     T* get_tableau(){
         return tableau_;
@@ -143,9 +149,35 @@ TableauCompact<T,DIMENSION>::~TableauCompact(){
 }
 
 
-//------------------//
 template <typename T, std::size_t DIMENSION>
-const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {
+const TableauIndice<T,DIMENSION-1,DIMENSION> TableauCompact<T,DIMENSION>::operator[] (std::ptrdiff_t ptr) const{
+    int decalage = ptr * sous_tailles_[0];
+    int tailles[DIMENSION-1];
+    int sous_tailles[DIMENSION-1];
+    for(std::size_t i = 1; i < DIMENSION; i++){
+        tailles[i-1] = tailles_[i];
+        sous_tailles[i-1] = sous_tailles_[i];
+    }
+
+    return TableauIndice<T,DIMENSION-1, DIMENSION>(this,decalage,tailles,sous_tailles);
+}
+
+template < typename T, std::size_t DIMENSION>
+TableauIndice<T,DIMENSION-1, DIMENSION>& TableauCompact<T,DIMENSION>::operator[] (ptrdiff_t ptr){
+    int decalage = ptr * sous_tailles_[0];
+    int tailles[DIMENSION-1];
+    int sous_tailles[DIMENSION-1];
+    for(std::size_t i = 1; i < DIMENSION; i++){
+        tailles[i-1] = tailles_[i];
+        sous_tailles[i-1] = sous_tailles_[i];
+    }
+
+    return TableauIndice<T,DIMENSION-1,DIMENSION>(this,decalage,tailles,sous_tailles);
+} 
+
+//------------------//
+/*template <typename T, std::size_t DIMENSION>
+const *TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {
     if(i < 0 or i >= tailles_[0]){
         throw std::out_of_range("TableauCompact: Index out of range");
     }else{
@@ -163,7 +195,7 @@ const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std
             nouvelle_tailleTableau*= nouvelle_tailles[j];
         }
 
-        TableauCompact<T,DIMENSION-1> tableau =  TableauCompact<T,DIMENSION-1>();
+        TableauCompact<T,DIMENSION-1> *tableau =  new TableauCompact<T,DIMENSION-1>();
         T* copieTableau = new T[nouvelle_tailleTableau];
         for(std::size_t j = i*sous_tailles_[0]; j < i*sous_tailles_[0]+nouvelle_tailleTableau;j++){
             copieTableau[j] = tableau_[j];
@@ -175,7 +207,7 @@ const TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std
 
         return tableau;
     }
-}
+}*/
 //-------------------//
 
 //---------------------------------------------------------------------------------------------//
@@ -199,8 +231,16 @@ public:
     // Opérateurs
     TableauCompact<T,1>& operator= (const TableauCompact<T,1>& );                     // opérateur d'assignation
     TableauCompact<T,1>& operator= (TableauCompact<T,1>&&);                  // opérateur de transfert
-    inline const T operator[] (ptrdiff_t ptr) const;          // opérateur []
-    inline T& operator[] (ptrdiff_t ptr);                     // opérateur []
+    inline const T operator[] (ptrdiff_t) const;          // opérateur []
+    inline T& operator[] (ptrdiff_t);                     // opérateur []
+
+    void set_offset(int decalage,T valeur){
+        tableau_[decalage] = valeur;
+    }
+
+    T get_offset(int decalage){
+        return tableau_[decalage];
+    }
 
     template < typename M >
     friend std::ostream& operator<< (std::ostream&, const TableauCompact<M,1>&);
@@ -314,27 +354,95 @@ std::ostream& operator<< (std::ostream& out, const TableauCompact<T,1>& tableau)
 
 // J'AVOUE NE PAS COMPRENDRE EXACTEMENT COMMENT FONCTIONNE LA SIGNATURE D'HERITAGE en regardant les exemples
 
-template < typename T,std::size_t DIMENSION>
-class TableauSlice/*<T,DIMENSION>*/ /*: public TableauCompact<T,DIMENSION>*/{
+/*template < typename T,std::size_t DIMENSION, std::size_t DIM>
+class TableauIndice{
 public:
-    TableauSlice();
-    // TableauSlice(TableauSlice&)
-    // TableauSlice(TableauSlice&&)
+    TableauIndice(TableauCompact<T,DIM>*,std::size_t,int*,int*);
+    // TableauIndice(TableauIndice&)
+    // TableauIndice(TableauIndice&&)
+    inline const TableauIndice<T,DIMENSION-1,DIM> operator[] (ptrdiff_t) const;          // opérateur []
+    inline TableauIndice<T,DIMENSION-1,DIM>& operator[] (ptrdiff_t);                     // opérateur []
 
+    //~TableauIndice();
 
-
-    ~TableauSlice();
+private:
+    TableauCompact<T,DIM>* tableau_;
+    std::size_t decalage_;
+    int tailles_[DIMENSION];
+    int sous_tailles_[DIMENSION];
 };
 
-template < typename T>
-class TableauSlice < T, 1 >/* : public TableauCompact<T>*/{
+template < typename T, std::size_t DIMENSION,std::size_t DIM>
+TableauIndice<T,DIMENSION,DIM>::TableauIndice(TableauCompact<T,DIM>* tableau,std::size_t decalage,int tailles[DIMENSION],int sous_tailles[DIMENSION]):decalage_(decalage){
+    tableau_ = tableau;
+    for(std::size_t i = 0; i < DIMENSION; i++){
+        tailles_[i] = tailles[i];
+        sous_tailles_[i] = sous_tailles[i];
+    }
+
+}
+
+template < typename T, std::size_t DIMENSION,std::size_t DIM>
+const TableauIndice<T,DIMENSION-1, DIM> TableauIndice<T,DIMENSION,DIM>::operator[] (ptrdiff_t ptr) const{
+    int decalage = decalage_;
+    decalage += ptr * sous_tailles_[0];
+    int tailles[DIMENSION-1];
+    int sous_tailles[DIMENSION-1];
+    for(std::size_t i = 1; i < DIMENSION; i++){
+        tailles[i-1] = tailles_[i];
+        sous_tailles[i-1] = sous_tailles_[i];
+    }
+
+    return TableauIndice<T,DIMENSION-1, DIM>(tableau_,decalage,tailles,sous_tailles);
+}          // opérateur []
+
+template < typename T, std::size_t DIMENSION,std::size_t DIM>
+TableauIndice<T,DIMENSION-1, DIM>& TableauIndice<T,DIMENSION,DIM>::operator[] (ptrdiff_t ptr){
+    int decalage = decalage_;
+    decalage += ptr * sous_tailles_[0];
+    int tailles[DIMENSION-1];
+    int sous_tailles[DIMENSION-1];
+    for(std::size_t i = 1; i < DIMENSION; i++){
+        tailles[i-1] = tailles_[i];
+        sous_tailles[i-1] = sous_tailles_[i];
+    }
+
+    return TableauIndice<T,DIMENSION-1,DIM>(tableau_,decalage,tailles,sous_tailles);
+} 
+
+template < typename T,std::size_t DIM>
+class TableauIndice < T,0 ,DIM>{
 public:
-    TableauSlice();
-    ~TableauSlice();
-    
+    TableauIndice(TableauCompact<T,DIM>*,std::size_t,int*,int*);
+    //~TableauIndice();
+
+    T get(){
+        return tableau_.get_offset(decalage_);
+    }
+
+    void set(T  valeur){
+        tableau_.set_offset(decalage_,valeur);
+    }
+
+    T& operator=(const T&);
+
+    operator T(){return get();}
+
+private:
+    TableauCompact<T,DIM>* tableau_;
+    std::size_t decalage_;
 };
 
+template < typename T,std::size_t DIM>
+TableauIndice<T,0,DIM>::TableauIndice(TableauCompact<T,DIM>* tableau,std::size_t decalage,int*,int*):decalage_(decalage){
+    tableau_ = tableau;
+}
 
+template < typename T,std::size_t DIM>
+T& TableauIndice<T,0,DIM>::operator=(const T& valeur){
+    this->set(valeur);
+    return valeur;
+}*/
 
 
 
