@@ -28,16 +28,6 @@
 
 template < typename T, std::size_t DIMENSION = 1>  // 2 paramètres de template: type et nombre de tableaux
 class TableauCompact{
-private:
-
-    // Attributs
-
-    T* tableau_; // array compacte qui contient toutes les valeurs 
-    std::size_t taille_tableau_ = 1; // taille complete de ce tableau en compacté
-    int tailles_[DIMENSION]; // array qui contient les tailles de chaque dimension
-    int sous_tailles_[DIMENSION]; // contient les tailles des sous-dimensions
-
-
 public:
 
     // Constructeurs
@@ -88,6 +78,16 @@ public:
             sous_tailles_[i] = sous_tailles[i];
         }
     }
+private:
+
+    // Attributs
+
+    T* tableau_; // array compacte qui contient toutes les valeurs 
+    std::size_t taille_tableau_ = 1; // taille complete de ce tableau en compacté
+    int tailles_[DIMENSION]; // array qui contient les tailles de chaque dimension
+    int sous_tailles_[DIMENSION]; // contient les tailles des sous-dimensions
+
+
 
 };
 // Constructeurs
@@ -104,15 +104,16 @@ TableauCompact<T,DIMENSION>::TableauCompact(int* array){ // on ne peut pas initi
         std::cout<< "taille_tableau_ :"<< taille_tableau_ <<std::endl;
         tailles_[i] = array[i]; // enregistre les différentes tailes de chaque dimension
     }
-
-
     std::cout<<std::endl << "\033[0;31mTest tailles_\033[0m" << std::endl;
     for(std::size_t i = 0; i < DIMENSION;i++){
         std::cout << " tailles_["<<i<<"]: "<<tailles_[i];
     }
+
     tableau_ = new T[taille_tableau_];
+
     std::cout<<std::endl << "\033[0;31mTest tableau_\033[0m" << std::endl;
     for(std::size_t i = 0; i < taille_tableau_;i++){
+        tableau_[i] = 0;
         std::cout << " tableau_["<<i<<"]: "<<tableau_[i];
     }
     int valeur_sousTaille = 1;
@@ -133,9 +134,7 @@ TableauCompact<T,DIMENSION>::TableauCompact(int* array){ // on ne peut pas initi
 // Destructeur
 template <typename T, std::size_t DIMENSION>
 TableauCompact<T,DIMENSION>::~TableauCompact(){
-    delete tableau_;
-    delete tailles_;
-    delete sous_tailles_;
+    delete[] tableau_;
 }
 
 
@@ -210,7 +209,7 @@ public:
 
     // Destructeur
     ~TableauCompact(){
-        delete tableau_;
+        delete[] tableau_;
     }
 };
 
@@ -286,7 +285,7 @@ std::ostream& operator<< (std::ostream& out, const TableauCompact<T,1>& tableau)
     T *p = tableau.tableau_; // pointeur vers le début de l'array
     //std::cout<<sizeof(tab);
     out << "[ ";
-    for (size_t i = 0; i < tableau.size_; ++i){
+    for (std::size_t i = 0; i < tableau.size_; ++i){
         out <<(*p++);
         if(i < tableau.size_-1)
             out<<", ";
