@@ -175,6 +175,11 @@ TableauIndice<T,DIMENSION-1, DIMENSION>& TableauCompact<T,DIMENSION>::operator[]
     return TableauIndice<T,DIMENSION-1,DIMENSION>(this,decalage,tailles,sous_tailles);
 } 
 
+template < typename M, std::size_t Dim>
+    friend std::ostream& operator<< (std::ostream& out, const TableauCompact<M,Dim>& tableau){
+
+    }
+
 //------------------//
 /*template <typename T, std::size_t DIMENSION>
 const *TableauCompact<T,DIMENSION-1> TableauCompact<T,DIMENSION>::operator[] (std::ptrdiff_t i) const {
